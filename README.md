@@ -1,51 +1,74 @@
-# React Deferred Input
+## React Super Dropdown
+
+Non-prescriptive React.js dropdown toolkit.
+
+## Disclaimer
+
+This is a fork of [react-simple-dropdown](https://www.npmjs.com/package/react-simple-dropdown).
+
+With the following enhancements:
+
+- Updated ES2015 source syntax
+- Removed need for external stylesheet to be used
+- Added ability to use custom tag names for the trigger and menu elements. With `react-simple-dropdown` the trigger and menu may only be rendered using `div` tags. With this component you can use `ul`, `a`, or even any custom components you like. This is useful if you are using a ready-made theme.
+- Menu is not rendered if dropdown is closed - instead of it just being hidden by css.
+
+### Installation
+
+This module is designed for use with [Browserify](http://browserify.org) (but should work with anything CommonJS compatible). You can easily install it with [npm](http://npmjs.com):
 
 ```bash
-npm install react-deferred-input
+npm install react-super-dropdown
 ```
 
-## What is the purpose of this component?
+### How to use
 
-Form inputs in React can either be controller or uncontrolled (see [here](https://facebook.github.io/react/docs/forms.html)). Controlled components always display the `value` prop they are passed and need to trigger the `onChange` handler every time a character is added or removed so that they can be updated. Uncontrolled components render the initial `defaultValue` prop they get passed and after that they render what the user types into them.
+This module provides three React components that you can use as a basis for any kind of dropdown menu:
 
-This component gives you the functionality of a controlled component that always displays the `value` prop that it is given EXCEPT when a user is focused on the input then it waits till the user blurs and then only triggers the `onChange` (and `onBlur`) handlers if the value has change.
+- `DropdownTrigger`: The element that will cause your dropdown to appear when clicked.
+- `DropdownContents`: Contains the "filling" of your dropdown. Generally, this is a list of links.
+- `Dropdown`: The base element for your dropdown. This contains both the `DropdownTrigger` and the `DropdownContents`, and handles communication between them.
 
-This can dramatically reduce the number of network requests that get sent.
+Keep in mind that `DropdownTrigger` and `DropdownContent` **must be direct children** of `Dropdown`. Here's a quick example:
 
-## Example Usage
-
-```javascript
+```js
 import React, { Component } from 'react';
-import DeferredInput from 'react-deferred-input';
+import Dropdown, { DropdownTrigger, DropdownContent } from 'react-super-dropdown';
 
-class MyComponent extends Component {
-  render() {
+class MyDropdown extends Component {
+  render () {
     return (
-      <DeferredInput value='initial value' onChange={this.handleChange} />
+      <Dropdown>
+        <DropdownTrigger tagName='a'>Profile</DropdownTrigger>
+        <DropdownContent tagName='ul'>
+          <li>
+            <a href="/profile">Profile</a>
+          </li>
+          <li>
+            <a href="/favorites">Favorites</a>
+          </li>
+          <li>
+            <a href="/logout">Log Out</a>
+          </li>
+        </DropdownContent>
+      </Dropdown>
     );
   }
-
-  handleChange(value) {
-    console.log("this is only called when the input is blurred with the value: ", value);
-  }
 }
-
 ```
 
-## Options/Available props
+### Options
 
-| Prop Name      | Description                                                       | Default Value       |
-|----------------|-------------------------------------------------------------------|---------------------|
-| value          | input value                                                       | String: ''          |
-| onChange       | handler called with one argument (input value) on blur (required) | Function: undefined |
-| onBlur         | handler called with one argument (input value) on blur            | Function: undefined |
-| blurOnEnter    | should input blur when press ENTER key                            | Boolean: false      |
-| focusOnMount   | should input be focused when initially mounted                    | Boolean: false      |
-| clearOnChange  | should input value be cleared on blur                             | Boolean: false      |
-| inputComponent | component to be used for actual input                             | 'input'             |
+Options can be passed to `Dropdown` as props.A list of available options can be found below. These must be passed to the containing `Dropdown` component.
 
-Any other custom props will be passed on to input component.
+Property | Type | Description
+----- | ----- | -----
+**active** | *boolean* | Manually show/hide the `DropdownContent`. Make sure to unset this or the dropdown will stay open.
+**onShow** | *function* | Callback for when `DropdownContent` is shown.
+**onHide** | *function* | Callback for when `DropdownContent` is hidden.
 
-## License
+`DropdownContent` and `DropdownTrigger` components can also be passed the following options as props:
 
-MIT
+Property | Type | Description
+----- | ----- | -----
+**tagName** | *string/component* | tagName or component to be used for rendered element

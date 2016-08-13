@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', 'react', 'react-dom', 'lodash.uniqueid', './dropdownTrigger', './dropdownContent', './helpers'], factory);
+    define(['exports', 'react', 'react-dom', 'lodash.uniqueid', 'react-tether', './DropdownTrigger', './DropdownContent', './helpers'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('react'), require('react-dom'), require('lodash.uniqueid'), require('./dropdownTrigger'), require('./dropdownContent'), require('./helpers'));
+    factory(exports, require('react'), require('react-dom'), require('lodash.uniqueid'), require('react-tether'), require('./DropdownTrigger'), require('./DropdownContent'), require('./helpers'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.react, global.reactDom, global.lodash, global.dropdownTrigger, global.dropdownContent, global.helpers);
+    factory(mod.exports, global.react, global.reactDom, global.lodash, global.reactTether, global.DropdownTrigger, global.DropdownContent, global.helpers);
     global.index = mod.exports;
   }
-})(this, function (exports, _react, _reactDom, _lodash, _dropdownTrigger, _dropdownContent, _helpers) {
+})(this, function (exports, _react, _reactDom, _lodash, _reactTether, _DropdownTrigger, _DropdownContent, _helpers) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -22,15 +22,55 @@
 
   var _lodash2 = _interopRequireDefault(_lodash);
 
-  var _dropdownTrigger2 = _interopRequireDefault(_dropdownTrigger);
+  var _reactTether2 = _interopRequireDefault(_reactTether);
 
-  var _dropdownContent2 = _interopRequireDefault(_dropdownContent);
+  var _DropdownTrigger2 = _interopRequireDefault(_DropdownTrigger);
+
+  var _DropdownContent2 = _interopRequireDefault(_DropdownContent);
 
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
       default: obj
     };
   }
+
+  var _slicedToArray = function () {
+    function sliceIterator(arr, i) {
+      var _arr = [];
+      var _n = true;
+      var _d = false;
+      var _e = undefined;
+
+      try {
+        for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+          _arr.push(_s.value);
+
+          if (i && _arr.length === i) break;
+        }
+      } catch (err) {
+        _d = true;
+        _e = err;
+      } finally {
+        try {
+          if (!_n && _i["return"]) _i["return"]();
+        } finally {
+          if (_d) throw _e;
+        }
+      }
+
+      return _arr;
+    }
+
+    return function (arr, i) {
+      if (Array.isArray(arr)) {
+        return arr;
+      } else if (Symbol.iterator in Object(arr)) {
+        return sliceIterator(arr, i);
+      } else {
+        throw new TypeError("Invalid attempt to destructure non-iterable instance");
+      }
+    };
+  }();
 
   var _extends = Object.assign || function (target) {
     for (var i = 1; i < arguments.length; i++) {
@@ -132,20 +172,21 @@
 
         // is dropdown open
         var isActive = this.isActive();
+        var alignment = this.getAlignment();
 
         var trigger = null;
         var content = null;
 
         _react2.default.Children.forEach(this.props.children, function (child) {
-          // bind toggle hadnler to trigger child
-          if (child.type === _dropdownTrigger2.default) {
+          // bind toggle handler to trigger child
+          if (child.type === _DropdownTrigger2.default) {
             trigger = (0, _react.cloneElement)(child, {
               ref: 'trigger',
               onClick: _this2.handleToggleClick.bind(_this2)
             });
           }
           // else render menu if is open
-          else if (child.type === _dropdownContent2.default && isActive) {
+          else if (child.type === _DropdownContent2.default && isActive) {
               content = child;
             }
         });
@@ -153,11 +194,22 @@
         // custom tagName can be used. default is div
         return _react2.default.createElement(
           this.props.tagName,
-          _extends({}, (0, _helpers.omit)(this.props, ['openClassName', 'tagName', 'children', 'active']), {
+          _extends({}, (0, _helpers.omit)(this.props, ['openClassName', 'tagName', 'children', 'active', 'alignment']), {
             className: this.props.className + ' ' + (isActive ? this.props.openClassName : '')
           }),
-          trigger,
-          content
+          _react2.default.createElement(
+            _reactTether2.default,
+            {
+              attachment: alignment.menu,
+              targetAttachment: alignment.trigger,
+              constraints: [{
+                to: 'scrollParent',
+                attachment: 'together'
+              }]
+            },
+            trigger,
+            content
+          )
         );
       }
     }, {
@@ -176,6 +228,25 @@
       value: function show() {
         this.setState({ active: true });
         if (this.props.onShow) this.props.onShow();
+      }
+    }, {
+      key: 'getAlignment',
+      value: function getAlignment() {
+        var alignmentStr = this.props.alignment;
+
+        var _alignmentStr$split = alignmentStr.split(' ');
+
+        var _alignmentStr$split2 = _slicedToArray(_alignmentStr$split, 2);
+
+        var vertical = _alignmentStr$split2[0];
+        var horizontal = _alignmentStr$split2[1];
+
+        horizontal = horizontal || 'left';
+
+        return {
+          menu: vertical + ' ' + horizontal,
+          trigger: (vertical === 'bottom' ? 'top' : 'bottom') + ' ' + horizontal
+        };
       }
     }, {
       key: 'handleWindowClick',
@@ -211,15 +282,17 @@
 
   Dropdown.propTypes = {
     openClassName: _react.PropTypes.string,
-    tagName: _react.PropTypes.string
+    tagName: _react.PropTypes.string,
+    alignment: _react.PropTypes.string
   };
 
   Dropdown.defaultProps = {
     openClassName: 'open',
-    tagName: 'div'
+    tagName: 'div',
+    alignment: 'bottom left'
   };
 
-  exports.DropdownTrigger = _dropdownTrigger2.default;
-  exports.DropdownContent = _dropdownContent2.default;
+  exports.DropdownTrigger = _DropdownTrigger2.default;
+  exports.DropdownContent = _DropdownContent2.default;
   exports.default = Dropdown;
 });

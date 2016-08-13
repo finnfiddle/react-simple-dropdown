@@ -2,9 +2,10 @@
 import React, { cloneElement, Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import uniqueId from 'lodash.uniqueid';
+import TetherComponent from 'react-tether'
 
-import DropdownTrigger from './dropdownTrigger';
-import DropdownContent from './dropdownContent';
+import DropdownTrigger from './DropdownTrigger';
+import DropdownContent from './DropdownContent';
 
 import { omit } from './helpers'
 
@@ -36,12 +37,13 @@ class Dropdown extends Component {
   render() {
     // is dropdown open
     const isActive = this.isActive();
+    const alignment = this.getAlignment();
 
     let trigger = null;
     let content = null;
 
     React.Children.forEach(this.props.children, child => {
-      // bind toggle hadnler to trigger child
+      // bind toggle handler to trigger child
       if (child.type === DropdownTrigger) {
         trigger = cloneElement(child, {
           ref: 'trigger',
@@ -57,11 +59,20 @@ class Dropdown extends Component {
     // custom tagName can be used. default is div
     return (
       <this.props.tagName
-        {...omit(this.props, ['openClassName', 'tagName', 'children', 'active'])}
+        {...omit(this.props, ['openClassName', 'tagName', 'children', 'active', 'alignment'])}
         className={`${this.props.className} ${isActive ? this.props.openClassName : ''}`}
       >
-        {trigger}
-        {content}
+        <TetherComponent
+          attachment={alignment.menu}
+          targetAttachment={alignment.trigger}
+          constraints={[{
+            to: 'scrollParent',
+            attachment: 'together'
+          }]}
+        >
+          {trigger}
+          {content}
+        </TetherComponent>
       </this.props.tagName>
     );
   }
@@ -81,6 +92,17 @@ class Dropdown extends Component {
   show() {
     this.setState({ active: true });
     if (this.props.onShow) this.props.onShow();
+  }
+
+  getAlignment() {
+    const alignmentStr = this.props.alignment;
+    let [vertical, horizontal] = alignmentStr.split(' ');
+    horizontal = horizontal || 'left';
+
+    return {
+      menu: `${vertical} ${horizontal}`,
+      trigger: `${vertical === 'bottom' ? 'top' : 'bottom'} ${horizontal}`,
+    };
   }
 
   // if click anywhere in window check if we clicked inside the current dropdown
@@ -124,11 +146,13 @@ class Dropdown extends Component {
 Dropdown.propTypes = {
   openClassName: PropTypes.string,
   tagName: PropTypes.string,
+  alignment: PropTypes.string,
 };
 
 Dropdown.defaultProps = {
   openClassName: 'open',
   tagName: 'div',
+  alignment: 'bottom left',
 };
 
 export { DropdownTrigger, DropdownContent };

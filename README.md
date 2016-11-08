@@ -2,8 +2,6 @@
 
 Non-prescriptive React.js dropdown toolkit.
 
-## Disclaimer
-
 This is a fork of [react-simple-dropdown](https://www.npmjs.com/package/react-simple-dropdown).
 
 With the following enhancements:

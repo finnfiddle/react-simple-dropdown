@@ -1,0 +1,120 @@
+include mixins.pug
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="chrome=1")
+    title #{title} by #{githubUser}
+
+    link(rel="stylesheet" href="dist/css/styles.css")
+    link(rel="stylesheet" href="dist/css/github-light.css")
+    link(
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/atom-one-light.min.css"
+    )
+    link(rel="stylesheet" href="dist/css/custom.css")
+    meta(name="viewport" content="width=device-width")
+    <!--[if lt IE 9]>
+    script(src="//html5shiv.googlecode.com/svn/trunk/html5.js")
+    <![endif]-->
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js")
+  body
+    .wrapper
+      header
+        h1= title
+        p= description
+
+        p.view
+          a(href=`https://github.com/${githubUser}/${name}`) View the Project on GitHub
+            small #{githubUser}/#{name}
+
+        ul
+          li
+            a(href=`https://github.com/${githubUser}/${name}/zipball/master`) Download
+              strong ZIP File
+          li
+            a(href=`https://github.com/${githubUser}/${name}/tarball/master`) Download
+              strong TAR Ball
+          li
+            a(href=`https://github.com/${githubUser}/${name}`) View On
+              strong GitHub
+
+      section
+
+        +heading Basic Example
+        +code('html')
+          :escape
+            <Dropdown
+              onShow={() => alert('dropdown shown')}
+              onHide={() => alert('dropdown hidden')}
+            >
+              <DropdownTrigger tagName='a'>Profile</DropdownTrigger>
+              <DropdownContent tagName='ul'>
+                <li>
+                  <a href="/profile">Profile</a>
+                </li>
+                <li>
+                  <a href="/favorites">Favorites</a>
+                </li>
+                <li>
+                  <a href="/logout">Log Out</a>
+                </li>
+              </DropdownContent>
+            </Dropdown>
+        #example-1
+
+        +heading Controlled
+        +code('html')
+          :escape
+            class ControlledDropdown extends React.Component {
+
+              constructor() {
+                super();
+                this.state = { active: false };
+              }
+
+              render() {
+                const { active } = this.state;
+
+                return (
+                  <div>
+                    <a
+                      onClick={() => {
+                        this.setState({ active: !active });
+                      }
+                    >
+                      Toggle
+                    </a>
+                    <Dropdown active={active}>
+                      <DropdownTrigger tagName='a'>Menu</DropdownTrigger>
+                      <DropdownContent tagName='ul'>
+                        <li>
+                          <a href="">Profile</a>
+                        </li>
+                        <li>
+                          <a href="">Favorites</a>
+                        </li>
+                        <li>
+                          <a href="">Log Out</a>
+                        </li>
+                      </DropdownContent>
+                    </Dropdown>
+                  </div>
+                )
+              }
+            }
+
+            <ControlledDropdown />
+        #example-2
+
+
+      footer
+        p This project is maintained by&nbsp;
+          a(href=`https://github.com/${githubUser}`)= githubUser
+        p
+          small Hosted on GitHub Pages &mdash; Theme by&nbsp;
+            a(href="https://github.com/orderedlist") orderedlist
+
+    script hljs.initHighlightingOnLoad();
+    script(src="dist/js/scale.fix.js")
+    script(src="dist/js/bundle.js")

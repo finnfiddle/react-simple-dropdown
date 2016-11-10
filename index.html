@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Title by finnfiddle</title>
+    <link rel="stylesheet" href="dist/css/styles.css">
+    <link rel="stylesheet" href="dist/css/github-light.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/atom-one-light.min.css">
+    <link rel="stylesheet" href="dist/css/custom.css">
+    <meta name="viewport" content="width=device-width"><!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Title</h1>
+        <p>Package description</p>
+        <p class="view"><a href="https://github.com/finnfiddle/package-name">View the Project on GitHub<small>finnfiddle/package-name</small></a></p>
+        <ul>
+          <li><a href="https://github.com/finnfiddle/package-name/zipball/master">Download<strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/finnfiddle/package-name/tarball/master">Download<strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/finnfiddle/package-name">View On<strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h3>Basic Example
+        </h3>
+        <pre><code class="html">&lt;Dropdown
+  onShow={() =&gt; alert(&#39;dropdown shown&#39;)}
+  onHide={() =&gt; alert(&#39;dropdown hidden&#39;)}
+&gt;
+  &lt;DropdownTrigger tagName=&#39;a&#39;&gt;Profile&lt;/DropdownTrigger&gt;
+  &lt;DropdownContent tagName=&#39;ul&#39;&gt;
+    &lt;li&gt;
+      &lt;a href=&quot;/profile&quot;&gt;Profile&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+      &lt;a href=&quot;/favorites&quot;&gt;Favorites&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+      &lt;a href=&quot;/logout&quot;&gt;Log Out&lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/DropdownContent&gt;
+&lt;/Dropdown&gt;</code></pre>
+        <div id="example-1"></div>
+        <h3>Controlled
+        </h3>
+        <pre><code class="html">class ControlledDropdown extends React.Component {
+
+  constructor() {
+    super();
+    this.state = { active: false };
+  }
+
+  render() {
+    const { active } = this.state;
+
+    return (
+      &lt;div&gt;
+        &lt;a
+          onClick={() =&gt; {
+            this.setState({ active: !active });
+          }
+        &gt;
+          Toggle
+        &lt;/a&gt;
+        &lt;Dropdown active={active}&gt;
+          &lt;DropdownTrigger tagName=&#39;a&#39;&gt;Menu&lt;/DropdownTrigger&gt;
+          &lt;DropdownContent tagName=&#39;ul&#39;&gt;
+            &lt;li&gt;
+              &lt;a href=&quot;&quot;&gt;Profile&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+              &lt;a href=&quot;&quot;&gt;Favorites&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+              &lt;a href=&quot;&quot;&gt;Log Out&lt;/a&gt;
+            &lt;/li&gt;
+          &lt;/DropdownContent&gt;
+        &lt;/Dropdown&gt;
+      &lt;/div&gt;
+    )
+  }
+}
+
+&lt;ControlledDropdown /&gt;</code></pre>
+        <div id="example-2"></div>
+      </section>
+      <footer>
+        <p>This project is maintained by&nbsp;<a href="https://github.com/finnfiddle">finnfiddle</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by&nbsp;<a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="dist/js/scale.fix.js"></script>
+    <script src="dist/js/bundle.js"></script>
+  </body>
+</html>

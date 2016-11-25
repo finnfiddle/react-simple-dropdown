@@ -79,7 +79,7 @@
     function DropdownContent() {
       _classCallCheck(this, DropdownContent);
 
-      var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DropdownContent).call(this));
+      var _this = _possibleConstructorReturn(this, (DropdownContent.__proto__ || Object.getPrototypeOf(DropdownContent)).call(this));
 
       _this.displayName = 'DropdownContent';
       return _this;

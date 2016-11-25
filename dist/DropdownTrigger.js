@@ -79,7 +79,7 @@
     function DropdownTrigger() {
       _classCallCheck(this, DropdownTrigger);
 
-      var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DropdownTrigger).call(this));
+      var _this = _possibleConstructorReturn(this, (DropdownTrigger.__proto__ || Object.getPrototypeOf(DropdownTrigger)).call(this));
 
       _this.displayName = 'DropdownTrigger';
       return _this;

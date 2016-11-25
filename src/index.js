@@ -36,6 +36,7 @@ class Dropdown extends Component {
 
   render() {
     // is dropdown open
+    const { className, openClassName, tether } = this.props;
     const isActive = this.isActive();
     const alignment = this.getAlignment();
 
@@ -57,10 +58,17 @@ class Dropdown extends Component {
     });
 
     // custom tagName can be used. default is div
-    return (
+    return tether ? (
       <this.props.tagName
-        {...omit(this.props, ['openClassName', 'tagName', 'children', 'active', 'alignment'])}
-        className={`${this.props.className} ${isActive ? this.props.openClassName : ''}`}
+        {...omit(this.props, [
+          'openClassName',
+          'tagName',
+          'children',
+          'active',
+          'alignment',
+          'tether',
+        ])}
+        className={`${className} ${isActive ? openClassName : ''}`}
       >
         <TetherComponent
           attachment={alignment.menu}
@@ -73,6 +81,21 @@ class Dropdown extends Component {
           {trigger}
           {content}
         </TetherComponent>
+      </this.props.tagName>
+    ) : (
+      <this.props.tagName
+        {...omit(this.props, [
+          'openClassName',
+          'tagName',
+          'children',
+          'active',
+          'alignment',
+          'tether',
+        ])}
+        className={`${className} ${isActive ? openClassName : ''}`}
+      >
+        {trigger}
+        {content}
       </this.props.tagName>
     );
   }
@@ -147,12 +170,14 @@ Dropdown.propTypes = {
   openClassName: PropTypes.string,
   tagName: PropTypes.string,
   alignment: PropTypes.string,
+  tether: PropTypes.bool,
 };
 
 Dropdown.defaultProps = {
   openClassName: 'open',
   tagName: 'div',
   alignment: 'bottom left',
+  tether: true,
 };
 
 export { DropdownTrigger, DropdownContent };

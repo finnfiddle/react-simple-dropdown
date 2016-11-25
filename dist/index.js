@@ -140,7 +140,7 @@
     function Dropdown() {
       _classCallCheck(this, Dropdown);
 
-      var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dropdown).call(this));
+      var _this = _possibleConstructorReturn(this, (Dropdown.__proto__ || Object.getPrototypeOf(Dropdown)).call(this));
 
       // unique id used for closing when another dropdown gets clicked
       _this.uid = (0, _lodash2.default)('react_super_dropdown_');
@@ -170,7 +170,11 @@
       value: function render() {
         var _this2 = this;
 
-        // is dropdown open
+        var _props = this.props,
+            className = _props.className,
+            openClassName = _props.openClassName,
+            tether = _props.tether;
+
         var isActive = this.isActive();
         var alignment = this.getAlignment();
 
@@ -192,10 +196,10 @@
         });
 
         // custom tagName can be used. default is div
-        return _react2.default.createElement(
+        return tether ? _react2.default.createElement(
           this.props.tagName,
-          _extends({}, (0, _helpers.omit)(this.props, ['openClassName', 'tagName', 'children', 'active', 'alignment']), {
-            className: this.props.className + ' ' + (isActive ? this.props.openClassName : '')
+          _extends({}, (0, _helpers.omit)(this.props, ['openClassName', 'tagName', 'children', 'active', 'alignment', 'tether']), {
+            className: className + ' ' + (isActive ? openClassName : '')
           }),
           _react2.default.createElement(
             _reactTether2.default,
@@ -210,6 +214,13 @@
             trigger,
             content
           )
+        ) : _react2.default.createElement(
+          this.props.tagName,
+          _extends({}, (0, _helpers.omit)(this.props, ['openClassName', 'tagName', 'children', 'active', 'alignment', 'tether']), {
+            className: className + ' ' + (isActive ? openClassName : '')
+          }),
+          trigger,
+          content
         );
       }
     }, {
@@ -234,12 +245,10 @@
       value: function getAlignment() {
         var alignmentStr = this.props.alignment;
 
-        var _alignmentStr$split = alignmentStr.split(' ');
-
-        var _alignmentStr$split2 = _slicedToArray(_alignmentStr$split, 2);
-
-        var vertical = _alignmentStr$split2[0];
-        var horizontal = _alignmentStr$split2[1];
+        var _alignmentStr$split = alignmentStr.split(' '),
+            _alignmentStr$split2 = _slicedToArray(_alignmentStr$split, 2),
+            vertical = _alignmentStr$split2[0],
+            horizontal = _alignmentStr$split2[1];
 
         horizontal = horizontal || 'left';
 
@@ -283,13 +292,15 @@
   Dropdown.propTypes = {
     openClassName: _react.PropTypes.string,
     tagName: _react.PropTypes.string,
-    alignment: _react.PropTypes.string
+    alignment: _react.PropTypes.string,
+    tether: _react.PropTypes.bool
   };
 
   Dropdown.defaultProps = {
     openClassName: 'open',
     tagName: 'div',
-    alignment: 'bottom left'
+    alignment: 'bottom left',
+    tether: true
   };
 
   exports.DropdownTrigger = _DropdownTrigger2.default;
